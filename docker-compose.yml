@@ -1,0 +1,29 @@
+version: "2"
+services:
+  web:
+    image: express-web
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: express
+    ports:
+      - "3000:3000"
+    environment:
+      - KEY=abc
+    restart: always
+    volumes:
+      - ./src:/usr/app/src
+    links:
+      - mongoDB
+    depends_on:
+      - mongoDB
+  mongoDB:
+    image: mongo
+    container_name: mongodb
+    volumes:
+      - "./data:/data/db"
+    environment:
+      - PUID=1000
+      - PGID=1000
+    ports:
+      - "27017:27017"
